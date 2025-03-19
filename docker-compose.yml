@@ -1,0 +1,65 @@
+---
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=sso.sitnet.pp.ua"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - internal
+
+  sso:
+    image: quay.io/keycloak/keycloak:24.0.5
+    container_name: "keycloak"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./keycloak.conf:/opt/keycloak/conf/keycloak.conf
+    command:
+      - start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=E6LFspip
+      - PROXY_ADDRESS_FORWARDING=true
+      - KC_DB_PASSWORD=E6LFspip
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`sso.sitnet.pp.ua`)"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.tls.certresolver=myresolver"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+    networks:
+      - internal
+
+  database:
+    image: postgres:15
+    container_name: "postgres"
+    environment:
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=E6LFspip
+      - POSTGRES_DB=keycloak
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  letsencrypt:
+
