@@ -10,7 +10,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=sso.sitnet.pp.ua"
+      - "--certificatesresolvers.myresolver.acme.email=<your.domain.com>"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
@@ -31,12 +31,12 @@ services:
       - start-dev
     environment:
       - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=E6LFspip
+      - KEYCLOAK_ADMIN_PASSWORD=<changeme>
       - PROXY_ADDRESS_FORWARDING=true
-      - KC_DB_PASSWORD=E6LFspip
+      - KC_DB_PASSWORD=<changeme>
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`sso.sitnet.pp.ua`)"
+      - "traefik.http.routers.keycloak.rule=Host(`<your.domain.com>`)"
       - "traefik.http.routers.keycloak.entrypoints=websecure"
       - "traefik.http.routers.keycloak.tls.certresolver=myresolver"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
@@ -48,7 +48,7 @@ services:
     container_name: "postgres"
     environment:
       - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=E6LFspip
+      - POSTGRES_PASSWORD=<changeme>
       - POSTGRES_DB=keycloak
     volumes:
       - postgres_data:/var/lib/postgresql/data
