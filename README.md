@@ -31,7 +31,7 @@ This repository provides a simple setup for running Keycloak using Docker Compos
    ```
 4. Change to the repository directory:
    ```sh
-   cd keycloak-docker-setup
+   cd keycloak-docker
    ```
 5. Adjust environment variables at docker-compose.yml and keycloak.conf:
    ```sh
@@ -53,7 +53,7 @@ This repository provides a simple setup for running Keycloak using Docker Compos
    ```
 6. Start the Keycloak service using Docker Compose:
    ```sh
-   docker-compose up -d
+   docker compose up -d
    ```
 7. Verify that the containers are running:
    ```sh
@@ -73,7 +73,7 @@ Default credentials (if configured in `docker-compose.yml`):
 ## Stopping the Service
 To stop Keycloak and remove containers, run:
 ```sh
-docker-compose down
+docker compose down
 ```
 
 ---
