@@ -3,7 +3,7 @@
 This repository provides a simple setup for running Keycloak using Docker Compose.
 
 ## Prerequisites
-1. Install Docker and Docker Compose: [Docker Installation Guide](https://docs.docker.com/get-docker/)
+1. Install Docker and Docker Compose: [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
 2. Create a dedicated user for Keycloak:
    ```sh
    sudo useradd -m -s /bin/bash keycloak
@@ -41,7 +41,7 @@ This repository provides a simple setup for running Keycloak using Docker Compos
     - PROXY_ADDRESS_FORWARDING=true
     - KC_DB_PASSWORD=<changeme>  # Must be the same as POSTGRES_PASSWORD
 
-    - "--certificatesresolvers.myresolver.acme.email=<your.domain.com>"
+    - "--certificatesresolvers.myresolver.acme.email=<user@your.domain.com>"
     - "traefik.http.routers.keycloak.rule=Host(`<your.domain.com>`)"
 
     - POSTGRES_USER=keycloak
